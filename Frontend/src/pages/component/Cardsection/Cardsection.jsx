@@ -17,14 +17,17 @@ import {
 } from "@mui/material";
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import React, { useState } from "react";
+import Modall from "./Modal";
 
 const Cardsection = () => {
   const theme=useTheme()
-  const [alignment, setAlignment] = useState("left");
+  const [onclick, setonclick] = useState({});
 
   const handleAlignment = (event, newValue) => {
-    setAlignment(newValue);
-    setmydata(newValue)
+    if (newValue !== null) {
+      setmydata(newValue)
+
+    }
   };
   const categroymen =
     "http://localhost:1337/api/products?populate=*&filters[productcategroy][$eq]=men";
@@ -74,7 +77,7 @@ const Cardsection = () => {
             </Typography>
           </Box>
           <ToggleButtonGroup
-            value={allproduct}
+            value={mydata}
             exclusive
             onChange={handleAlignment}
             aria-label="text alignment"
@@ -127,6 +130,7 @@ const Cardsection = () => {
         >
           {data.data.map((item) => {
             return (
+              <Box>
               <Card
                 key={item.producttitle}
                 sx={{
@@ -173,7 +177,11 @@ const Cardsection = () => {
                   }}
                 >
                   <Button
-                    onClick={handleOpen}
+                    onClick={() => {
+                      handleOpen()
+                      setonclick(item)
+                    }
+                    }
                     sx={{ textTransform: "capitalize" }}
                     size="small"
                   >
@@ -188,118 +196,16 @@ const Cardsection = () => {
                   </Stack>
                 </CardActions>
               </Card>
+              
+              </Box>
             );
           })}
-          {true && (
-            <Modal
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <Box sx={style}>
-                <IconButton
-                  sx={{
-                    position: "absolute",
-                    top: { xs: 30, md: 0 },
-                    right: { xs: 30, md: 0 },
-                    ":hover": {
-                      color: "red",
-                      rotate: "360deg",
-                      transition: "0.3s",
-                      cursor: "pointer",
-                    },
-                  }}
-                  onClick={handleClose}
-                >
-                  <Close />
-                </IconButton>
-
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: { xs: "column", md: "row" },
-                  }}
-                  component="section"
-                >
-                  <Box sx={{ mx: "auto" }} component="div">
-                    <img
-                      style={{
-                        width: "320px",
-                        borderRadius: "10px",
-                        height: "100%",
-                      }}
-                      src="/image/1 (15).JPG"
-                      alt=""
-                    />
-                  </Box>
-                  <Box
-                    sx={{
-                      bgcolor: "white",
-                      ml: 2,
-                      pl: 1,
-                      pb: 1,
-                      pt: 1.5,
-                      borderRadius: "5px",
-                      textAlign: { xs: "center", md: "left" },
-                    }}
-                    component="div"
-                  >
-                    <Typography color="black" variant="h5">
-                      WOMEN'S FASHION
-                    </Typography>
-                    <Typography
-                      variant="body1"
-                      my={1}
-                      color={"crimson"}
-                      fontSize={"22px"}
-                    >
-                      $12.99
-                    </Typography>
-                    <Typography color="gray" variant="body1">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Tenetur nesciunt, consectetur maiores nobis et quod
-                      aliquam reiciendis qui ea eaque doloremque
-                    </Typography>
-                    <Box sx={{ display: "flex", justifyContent: "center" }}>
-                      <img
-                        src="/image/2 (2).jpg"
-                        style={{
-                          width: "150px",
-                          height: "150px",
-                          borderRadius: "25px",
-                        }}
-                        alt=""
-                      />
-                      <img
-                        src="/image/2 (1).jpg"
-                        style={{
-                          width: "150px",
-                          height: "150px",
-                          borderRadius: "25px",
-                        }}
-                        alt=""
-                      />
-                      <img
-                        style={{
-                          width: "150px",
-                          height: "150px",
-                          borderRadius: "25px",
-                        }}
-                        src="/image/1 (15).JPG"
-                        alt=""
-                      />
-                    </Box>
-                    <Button sx={{ mt: { xs: 2, md: 1 } }} variant="contained">
-                      <AddShoppingCart /> Buy Now
-                    </Button>
-                  </Box>
-                </Box>
-              </Box>
-            </Modal>
-          )}
+        
         </Container>
+        {true&& <Modall open={open} handleClose={handleClose} item={onclick} mydata={mydata}/>}
+        
       </Box>
+      
     );
   }
 };
